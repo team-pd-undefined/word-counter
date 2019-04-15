@@ -1,10 +1,13 @@
 (async () => {
     console.time();
     let filename = Deno.args[1];
-    const decoder = new TextDecoder("utf-8");
       let file:Uint8Array = await Deno.readFile(filename);
       
-      let data:string = decoder.decode(file).toString();
+      let data:string = new TextDecoder().decode(file).toString();
+
+      data = data.replace(/[\r\n|\n|\[\]]/g, " ");
+      data = data.replace(/[^A-z]/g," ");
+      
 
       find(data);
       console.timeEnd();
@@ -13,6 +16,8 @@
 
 let find = function(data:string) {
     let map:Map<String, number> = new Map<String, number>();
+
+    data = data.toLowerCase();
     // console.log(data);
     let count = data.split(' ');
 
@@ -27,7 +32,13 @@ let find = function(data:string) {
             map.set(str,1);
         }
     }
+
     
-    console.log(JSON.stringify(Array.from(map.entries())));
+
+    const encoder = new TextEncoder();
+  const txt = encoder.encode(JSON.stringify(Array.from(map.entries())));
+  Deno.writeFile("result.txt", txt);
+    
+    // console.log();
     
 }
