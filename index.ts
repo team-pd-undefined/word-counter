@@ -13,7 +13,7 @@ function main() {
         if(counterMap.has(word)) {
             counterMap.set(word, counterMap.get(word) + 1);
         } else {
-            counterMap.set(word, 0);
+            counterMap.set(word, 1);
         }
     });
 
