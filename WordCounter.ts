@@ -1,17 +1,30 @@
-const wordCounter = (fullString: string, targetWord: string) => {
-    const reg = new RegExp(targetWord, 'gim');
-    const match = fullString.match(reg);
-    return match.length;
+console.time('wordCounter');
+const wordCounter = (fullString: string) => {
+    let countObj = {};
+    const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gim;
+    const space = /\r\n|\r|\n/gim;
+    const wordArray = fullString.replace(reg, ' ').replace(space, ' ').split(' ');
+    wordArray.forEach((val, idx) => {
+        let lowerVal = val.toLocaleLowerCase().trim(); 
+        if(countObj[lowerVal]){
+            countObj[lowerVal] = countObj[lowerVal] + 1;
+        } else {
+            countObj[lowerVal] = 1;
+        }
+    })
+    console.log(countObj['for']);
+    console.log(JSON.stringify(countObj));
 } 
 
 (async () => {
     const fileName = Deno.args[1];
-    const targetWord = Deno.args[2];
     const utf8Decoder = new TextDecoder('utf-8');
 
     const file = Deno.readFileSync(`./${fileName}`);
     const fileText = utf8Decoder.decode(file);
 
-    const count = wordCounter(fileText, targetWord)
-    console.log(`'${targetWord}'의 개수는 ${count}개 입니다.`);
+    const count = wordCounter(fileText)
+
   })();
+
+console.timeEnd('wordCounter');
