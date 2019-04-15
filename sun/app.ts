@@ -1,15 +1,15 @@
-const { open, read, copy, stdout } = Deno;
+const { open, read, run } = Deno;
 
 console.time("word-count");
 
 let dic = {};
 let prev: string = "";
 
-async function run() {
+async function main() {
     const file = await open("./odyssey.mb-2.txt");
-    const buf = new Uint8Array(2000);
 
     while (true) {
+        const buf = new Uint8Array(5000);
         const { eof } = await read(file.rid, buf);
 
         if (eof) {
@@ -21,11 +21,11 @@ async function run() {
         const sentence = prev + text;
 
         let matched = sentence.match(/\w+/gm);
-        prev = matched.splice(matched.length - 1)[0];
 
-        // 딱 떨어지는 단어 (\n, space 로 끝나는 경우)
-        if (!/\w/.test(sentence[sentence.length-1])) {
-            prev = prev + sentence[sentence.length-1];
+        if (/\w$/.test(sentence)) {
+            prev = matched.splice(matched.length - 1)[0];
+        } else {
+            prev = '';
         }
 
         count(matched);
@@ -41,6 +41,6 @@ function count(matched: string[]) {
     }
 }
 
-run().then(() => {
+main().then(() => {
     console.timeEnd("word-count");
 });
