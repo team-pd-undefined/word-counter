@@ -10,10 +10,11 @@ function main() {
     const counterMap = new Map<string, number>();
     
     words.forEach(word => {
-        if(counterMap.has(word)) {
-            counterMap.set(word, counterMap.get(word) + 1);
+        let lowercaseWord = word.toLowerCase();
+        if(counterMap.has(lowercaseWord)) {
+            counterMap.set(lowercaseWord, counterMap.get(lowercaseWord) + 1);
         } else {
-            counterMap.set(word, 1);
+            counterMap.set(lowercaseWord, 1);
         }
     });
 
@@ -21,7 +22,7 @@ function main() {
         console.log(`${key} : ${value}`);
     });
 
-    console.timeEnd('Counter')
+    console.timeEnd('Counter');
 }
 
 main();
