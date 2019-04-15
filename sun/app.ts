@@ -20,10 +20,10 @@ async function run() {
         const text = new TextDecoder().decode(buf);
         const sentence = prev + text;
 
-        // FIXME 딱 떨어지는 단어 (\n, space 로 끝나는 경우)
         let matched = sentence.match(/\w+/gm);
         prev = matched.splice(matched.length - 1)[0];
 
+        // 딱 떨어지는 단어 (\n, space 로 끝나는 경우)
         if (!/\w/.test(sentence[sentence.length-1])) {
             prev = prev + sentence[sentence.length-1];
         }
