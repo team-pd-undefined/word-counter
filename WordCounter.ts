@@ -12,18 +12,21 @@ const wordCounter = (fullString: string) => {
             countObj[lowerVal] = 1;
         }
     })
-    console.log(countObj['for']);
-    console.log(JSON.stringify(countObj));
-} 
+
+    return JSON.stringify(countObj);
+}
 
 (async () => {
     const fileName = Deno.args[1];
     const utf8Decoder = new TextDecoder('utf-8');
+    const utf8Encoder = new TextEncoder();
 
     const file = Deno.readFileSync(`./${fileName}`);
     const fileText = utf8Decoder.decode(file);
 
-    const count = wordCounter(fileText)
+    const result = wordCounter(fileText);
+
+    await Deno.writeFile('result.json', utf8Encoder.encode(result))
 
   })();
 
