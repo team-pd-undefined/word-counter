@@ -18,7 +18,7 @@ async function main() {
         }
 
         const text = new TextDecoder().decode(buf);
-        const sentence = prev + text;
+        const sentence = prev + text.toLowerCase();
 
         let matched = sentence.match(/\w+/gm);
 
@@ -36,8 +36,7 @@ async function main() {
 
 function count(matched: string[]) {
     for (let word of matched) {
-        const key = word.toLowerCase();
-        dic[key] = (dic[key] || 0) + 1;
+        dic[word] = (dic[word] || 0) + 1;
     }
 }
 
