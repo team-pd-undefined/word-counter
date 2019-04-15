@@ -7,17 +7,17 @@ let prev: string = "";
 
 async function main() {
     const file = await open("./odyssey.mb-2.txt");
+    const buf = new Uint8Array(5000);
 
     while (true) {
-        const buf = new Uint8Array(5000);
-        const { eof } = await read(file.rid, buf);
+        const { nread, eof } = await read(file.rid, buf);
 
         if (eof) {
             count([prev]);
             break;
         }
 
-        const text = new TextDecoder().decode(buf);
+        const text = new TextDecoder().decode(buf.slice(0, nread));
         const sentence = prev + text.toLowerCase();
 
         let matched = sentence.match(/\w+/gm);
