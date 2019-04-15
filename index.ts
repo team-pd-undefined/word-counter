@@ -2,11 +2,21 @@ const { readFileSync } = Deno;
 
 function main() {
     console.time('Counter');
-    const TXT_FILE = "./odyssey.mb-2.txt";
-    const decoder = new TextDecoder('utf-8');
-    const content = decoder.decode(readFileSync(TXT_FILE));
-    const words = content.match(/\w+/gi)
+    const words = getWords("./odyssey.mb-2.txt");
+    const counterMap = getCounterMap(words);
 
+    print(counterMap);
+
+    console.timeEnd('Counter');
+}
+
+function getWords(path: string): string[] {
+    const decoder = new TextDecoder('utf-8');
+    const content = decoder.decode(readFileSync(path));
+    return content.match(/\w+/gi);
+}
+
+function getCounterMap(words: string[]): Map<string, number> {
     const counterMap = new Map<string, number>();
     
     words.forEach(word => {
@@ -17,12 +27,13 @@ function main() {
             counterMap.set(lowercaseWord, 1);
         }
     });
+    return counterMap;
+}
 
+function print(counterMap: Map<string, number>): void {
     counterMap.forEach((value, key) => {
         console.log(`${key} : ${value}`);
     });
-
-    console.timeEnd('Counter');
 }
 
 main();
